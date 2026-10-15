@@ -1,0 +1,13 @@
+{
+  "name": "insta-kit",
+  "description": "Six skills en français pour que Claude gère ton Instagram : il trouve les reels qui explosent dans ta niche, écrit le tien à partir de ce qui marche (hook noté sur 623 reels réels), écrit la légende, met en place le DM mot-clé, répond à tes commentaires et sort ton meilleur reel du mois. Avec PlugKit branché, il publie, programme sur sept réseaux, envoie les DM et lit tes stats. Rien ne part sans ton « oui ».",
+  "version": "1.0.0",
+  "author": {
+    "name": "Antoine Blanco",
+    "url": "https://github.com/antoineblc99"
+  },
+  "homepage": "https://github.com/antoineblc99/insta-kit",
+  "repository": "https://github.com/antoineblc99/insta-kit",
+  "license": "MIT",
+  "keywords": ["instagram", "reels", "français", "hooks", "légendes", "dm", "plugkit", "humanizer"]
+}

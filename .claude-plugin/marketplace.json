@@ -1,0 +1,18 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "insta-kit",
+  "description": "insta-kit : les skills Instagram en français pour Claude",
+  "owner": {
+    "name": "Antoine Blanco",
+    "url": "https://github.com/antoineblc99"
+  },
+  "plugins": [
+    {
+      "name": "insta-kit",
+      "description": "Six skills Instagram en français : reels viraux de ta niche, script et hook noté, légende et publication, DM mot-clé, réponses aux commentaires, stats et meilleur reel du mois.",
+      "source": "./",
+      "category": "productivity",
+      "homepage": "https://github.com/antoineblc99/insta-kit"
+    }
+  ]
+}

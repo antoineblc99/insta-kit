@@ -1,0 +1,29 @@
+Prêt le 2026-10-15. Fichiers autonomes, sans dépendance, réutilisables tels quels.
+
+slop-fr.json
+  Lexique anti-IA français. Même format que le slop.json de Jake
+  (invisible, typographic, words, phrases, structures). 209 expressions
+  remplacées, 21 structures signalées. Le tiret cadratin y est écrit en échappement JSON (U+2014),
+  jamais en caractère littéral.
+  Espaces insécables : normalisées et comptées comme empreinte faible (ChatGPT en met).
+  Lu par skills/insta-humain/humanize.py et detect.py (version française,
+  accents gérés, à copier avec le lexique).
+
+hookscore_fr.py + hookscore_fr_poids.json
+  Score de hook en français. API : run(texte) -> (mesures, score 0-100,
+  verdict FORT/MOYEN/FAIBLE, pièges) ; features(texte) ; counted(poids).
+  Cherche hookscore_fr_poids.json dans son propre dossier (--poids pour un autre).
+  Calibré sur 623 reels français (corpus Reel Decode, hit = vues >= 2 x médiane
+  des 50 reels voisins) : AUC 0,59 en validation croisée (0,576 à 0,606),
+  formule d'origine non calibrée 0,57, passé -> futur 0,52.
+  Pièges mesurés : « Si tu… » 7,0 % de hits (n=43) contre 18,8 % ;
+  salutation 0 % (n=16) ; préambule 9,1 % (n=11). ATTAQUE et ADRESSE ont
+  poids 0 (à contresens sur ce corpus).
+
+calibration/calibrer.py
+  La méthode, pour recalibrer sur un autre corpus (TSV hook, perf, annee).
+  Aucune donnée de calibration dans le repo.
+
+Mis à jour après la création de ce fichier (même API, recopie si tu as pris une
+version plus ancienne) : triade élargie à deux mots par élément, message du piège
+« Si tu » chiffré (7 % contre 19 %), durée orale du hook à 230 mots/min.

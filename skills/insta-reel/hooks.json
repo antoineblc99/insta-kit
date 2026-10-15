@@ -1,0 +1,305 @@
+{
+ "version": "fr-1",
+ "note": "26 formules de hook pour les reels, en français. Un reel a deux hooks qui partent en même temps, et ce n'est pas la même phrase : la première chose que tu dis, et la première chose écrite à l'écran. Le hook parlé a environ deux secondes, le hook écrit environ une, parce qu'on le lit avant de l'entendre. Chaque formule a un modèle, un exemple rempli, la version écran, à quoi elle sert et comment on la rate. Chacune a aussi une regex `match` pour nommer un hook trouvé ailleurs, pas seulement en écrire un nouveau : on les parcourt dans l'ordre de `classify_order`, du plus précis au plus large, sans tenir compte de la casse. `piege` et `mesure` viennent des données du corpus Reel Decode (voir le README). Adapté du hooks.json d'instagram-agent-skill (Jake Schincariol, MIT), réécrit pour le français.",
+ "regles": [
+  "Écris le hook parlé et le hook écrit séparément. À l'écran, la version la plus courte et la plus brute : six mots au plus, pas de ponctuation inutile.",
+  "Pas de mise en place. La vidéo commence à la phrase que tu dirais normalement à la sixième seconde.",
+  "Dis le chiffre. « Beaucoup » n'est pas un chiffre, « tellement de temps » non plus.",
+  "La première image est un hook aussi. Une tête qui parle, immobile, sans texte à 0:00, c'est trois hooks gâchés.",
+  "Si le hook marcherait pour n'importe qui dans ta niche, ce n'est pas ton hook. Mets dedans ce que toi seul peux dire.",
+  "Un hook promet quelque chose. Livre-le avant la moitié, sinon la rétention que tu as gagnée repart.",
+  "Pas de « Si tu… » en ouverture : c'est le pire type d'ouverture mesuré (formule 10)."
+ ],
+ "hooks": [
+  {
+   "id": 1,
+   "nom": "L'aveu du coût",
+   "modele": "{Montant précis}, c'est ce que {une erreur} m'a coûté.",
+   "exemple": "18 000 €, c'est ce qu'une seule clause m'a coûté.",
+   "ecran": "ERREUR À 18 000 €",
+   "pour": "La confiance, vite. On regarde jusqu'au bout les vidéos où c'est toi qui as l'air bête.",
+   "ecueil": "Un faux coût. « Ça m'a coûté ma tranquillité » n'est pas un chiffre, et tout le monde l'entend.",
+   "match": "\\d[\\d ]*\\s?(?:€|euros?|balles|k€?)\\b[^.!?]{0,40}\\b(?:co[uû]t[ée]|perdu)|\\bm['’]a co[uû]t[ée]\\b|\\b(?:j['’]ai|on a) perdu\\b[^.!?]{0,30}(?:\\d|(?:\\d+|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|quinze|vingt|trente|quarante|cinquante|soixante|cent))"
+  },
+  {
+   "id": 2,
+   "nom": "L'ordre inversé",
+   "modele": "Arrête de {habitude courante}. Fais {alternative} à la place.",
+   "exemple": "Arrête de poster trois fois par jour. Poste deux fois et réponds à chaque commentaire pendant une heure.",
+   "ecran": "ARRÊTE DE POSTER TOUS LES JOURS",
+   "pour": "Les enregistrements et les débats. L'impératif attire une attention qu'un constat n'a pas.",
+   "ecueil": "Interdire une habitude que personne n'a. Le spectateur doit se reconnaître dedans.",
+   "match": "^\\s*(?:arr[êe]te[zs]?|stop)\\b|^\\s*ne (?:fais|faites|mets|poste|postez|dis|prends|ach[eè]te)\\s+(?:jamais|pas|plus)\\b|\\bne (?:fais|faites) (?:jamais|plus)\\b|^\\s*(?:ne\\s+|n['’])[^\\W\\d_]+\\s+(?:jamais|pas|plus)\\b"
+  },
+  {
+   "id": 3,
+   "nom": "Personne ne te dit",
+   "modele": "Personne ne te dit que {vérité qui dérange sur ce qu'il veut}.",
+   "exemple": "Personne ne te dit que tes 30 premiers reels sont censés faire un flop.",
+   "ecran": "TES 30 PREMIERS VONT FLOPPER",
+   "pour": "Les nouvelles audiences. Tu deviens celui qui dit tout haut ce que les autres taisent.",
+   "ecueil": "Une vérité que tout le monde répète déjà. Si les commentaires approuvent avant la fin, ce n'était pas un secret.",
+   "match": "\\bpersonne ne (?:te|vous|t['’]|nous)?\\s*(?:dit|dira|parle|explique|montre|apprend|avoue)\\b|\\bce que personne ne\\b|\\bon ne (?:te|vous) (?:le )?dit (?:jamais|pas)\\b|\\bon (?:te|vous) dit jamais\\b"
+  },
+  {
+   "id": 4,
+   "nom": "Le remplacement",
+   "modele": "{Ce truc} a remplacé {chose chère} pour {prix}.",
+   "exemple": "Cet outil à 12 € a remplacé le monteur que je payais 2 000 € par mois.",
+   "ecran": "2 000 € -> 12 €",
+   "pour": "Les démos et les vidéos d'outils. L'écart de prix fait le travail.",
+   "ecueil": "Exagérer le remplacement. S'il fait 60 % du travail, dis 60 %, sinon les commentaires le diront.",
+   "match": "\\bremplac\\w*\\b[^.!?]*(?:\\d|€)|(?:\\d|€)[^.!?]*\\bremplac\\w*|\\bau lieu de (?:payer|embaucher)\\b"
+  },
+  {
+   "id": 5,
+   "nom": "Le temps écrasé",
+   "modele": "Ça me prenait {long}. Maintenant, {court}.",
+   "exemple": "Mes devis me prenaient cinq heures. Maintenant, vingt minutes.",
+   "ecran": "5 H -> 20 MIN",
+   "pour": "Les vidéos de méthode où le gain, c'est la vitesse. Se lit d'un coup d'œil.",
+   "ecueil": "Un rapport que personne ne croit. De 40 heures à 4 secondes, on pense à un mensonge même quand c'est vrai.",
+   "match": "\\bme prenai(?:t|ent)\\b|\\bmaintenant,? (?:ça|il|elle) (?:me )?prend\\b|\\bça (?:me )?prend (?:(?:\\d+|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|quinze|vingt|trente|quarante|cinquante|soixante|cent))\\s*(?:s|sec|secondes?|min|minutes?|h|heures?)\\b|\\ben (?:(?:\\d+|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|quinze|vingt|trente|quarante|cinquante|soixante|cent))\\s*(?:secondes?|minutes?)\\s+(?:au lieu|chrono)\\b"
+  },
+  {
+   "id": 6,
+   "nom": "Le reçu",
+   "modele": "J'ai {fait X} pendant {N jours}. Voici les vrais chiffres.",
+   "exemple": "J'ai posté un reel par jour pendant 60 jours. Voici ce que ça a fait à mes DM.",
+   "ecran": "60 JOURS. VRAIS CHIFFRES.",
+   "pour": "Les expériences. Va avec une capture d'écran du vrai tableau de bord, c'est toute la valeur.",
+   "ecueil": "Ne pas montrer l'écran. Une vidéo de chiffres sans capture, c'est une affirmation.",
+   "match": "\\b(?:j['’]ai|on a)\\s+[^.!?]{0,40}\\bpendant\\s+(?:\\d+|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|quinze|vingt|trente|quarante|cinquante|soixante|cent)\\s+(?:jours?|semaines?|mois|ans)\\b|\\bvoici (?:les|mes) (?:vrais )?(?:chiffres|résultats)\\b|^\\s*(?:en|en l['’]espace de) (?:\\d+|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|quinze|vingt|trente|quarante|cinquante|soixante|cent) (?:jours?|semaines?|mois|ans)\\b|\\b(?:j['’]ai|on a) (?:fait|généré|gagné|scalé|vendu)\\b[^.!?]{0,40}\\b(?:\\d+|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|quinze|vingt|trente|quarante|cinquante|soixante|cent)\\s*(?:€|euros?|k|%|pour ?cents?|dollars?|clients?|ventes?)"
+  },
+  {
+   "id": 7,
+   "nom": "Mauvaise façon, bonne façon",
+   "modele": "Tu fais {X} de travers, et ce n'est pas ta faute. {La correction}.",
+   "exemple": "Tu écris tes légendes de travers, et ce n'est pas ta faute : Instagram cache tout après la première ligne.",
+   "ecran": "TES LÉGENDES SONT COUPÉES",
+   "pour": "L'enseignement. Le « pas ta faute » empêche la phrase de sonner comme une insulte, et c'est ce qui tue celle-ci.",
+   "ecueil": "Oublier l'absolution. « Tu fais mal » tout seul fait partir les gens au lieu de leur apprendre.",
+   "match": "\\b(?:la plus grosse|la pire|grosse|une|l['’])\\s*erreur\\b|\\berreur (?:que|qui|de)\\b|\\btu (?:le |la |les )?fais (?:mal|de travers|faux)\\b|\\b(?:vous|tu) (?:faites|fais) (?:tous |toutes )?(?:cette|la même) erreur\\b"
+  },
+  {
+   "id": 8,
+   "nom": "La fuite d'initié",
+   "modele": "J'ai passé {N ans} {dans le milieu}. Voici ce qu'on ne dit jamais.",
+   "exemple": "J'ai vendu des contrats d'agence pendant six ans. Voici ce qu'on ne mettait jamais dans le devis.",
+   "ecran": "6 ANS DE L'INTÉRIEUR",
+   "pour": "L'autorité sans diapo de diplômes. Ne marche que si les années sont vraies.",
+   "ecueil": "Promettre un secret et livrer la plaquette. Les commentaires ne pardonnent pas celle-ci.",
+   "match": "\\bj['’]ai (?:passé|travaillé|bossé|été|vendu)\\b[^.!?]*\\b(?:\\d+|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|quinze|vingt|trente|quarante|cinquante|soixante|cent)\\s*\\+?\\s*ans\\b|\\bon ne (?:dit|montre|disait|mettait) jamais\\b|\\bce qu['’]on ne (?:te |vous )?dit (?:jamais|pas)\\b"
+  },
+  {
+   "id": 9,
+   "nom": "Le vol autorisé",
+   "modele": "Vole ce {truc}. Il m'a fallu {temps} pour le mettre au point.",
+   "exemple": "Vole cette relance en quatre lignes. Il m'a fallu deux ans et beaucoup de prospects perdus.",
+   "ecran": "VOLE ÇA",
+   "pour": "Les enregistrements et les partages, les deux métriques qui poussent le plus la portée.",
+   "ecueil": "Le truc pas à l'écran. S'ils ne peuvent pas faire une capture, il n'y a rien à voler.",
+   "match": "^\\s*(?:vole|volez|pique|piquez|copie|copiez)\\b|\\b(?:vole|volez|pique|copie)[- ](?:ce|cette|ces|mon|ma|mes)\\b|^\\s*(?:voici|voilà) (?:le|la|mon|ma) (?:modèle|template|script|méthode) exact"
+  },
+  {
+   "id": 10,
+   "nom": "« Si tu… »",
+   "modele": "Si tu {situation précise}, ces {durée} vont la régler.",
+   "exemple": "Si tes reels font des vues et pas d'abonnés, les 40 prochaines secondes règlent ça.",
+   "ecran": "DES VUES, ZÉRO ABONNÉ ?",
+   "pour": "Qualifier fort. Moins de gens restent, ceux qui restent achètent.",
+   "ecueil": "Une situation si large qu'elle ne qualifie personne. « Si tu veux grandir » n'est pas une situation.",
+   "match": "^\\s*(?:et |mais |alors )?si (?:tu|t['’]|vous|ton|ta|tes|votre|vos)\\b",
+   "piege": "Piège mesuré. Dans le corpus Reel Decode, les reels qui ouvrent sur « Si tu… » font 8 % de hits (137 reels) contre 18 % en moyenne, le pire score des huit types d'ouverture. Ne la propose pas, sauf si la personne y tient : transforme la condition en affirmation (« Tes reels font des vues et zéro abonné. »)."
+  },
+  {
+   "id": 11,
+   "nom": "La liste avec une préférée",
+   "modele": "{N} {choses} qui {résultat}. La numéro {k}, personne ne l'utilise.",
+   "exemple": "Cinq retouches de légende qui doublent les enregistrements. La quatrième, personne ne la fait.",
+   "ecran": "5 RETOUCHES. LA 4E.",
+   "pour": "La rétention au milieu : nommer une préférée donne une raison de rester après la troisième.",
+   "ecueil": "Plus de sept. Personne ne croit que tu en as neuf bonnes, et tu ne les as pas.",
+   "match": "^\\s*(?:(?:voici|voilà)\\s+)?(?:\\d+|deux|trois|quatre|cinq|six|sept|huit|neuf|dix)\\s+[^\\W\\d_]+|\\b(?:le|la) (?:numéro|n°) ?\\d+\\b|\\bnuméro (?:\\d+|deux|trois|quatre|cinq)\\b|^\\s*(?:voici|voilà) (?:les |le top |mes |nos )?(?:\\d+|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|quinze|vingt|trente|quarante|cinquante|soixante|cent)\\b|^\\s*top (?:\\d+|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|quinze|vingt|trente|quarante|cinquante|soixante|cent)\\b|\\b(?:il existe|il y a|vous avez|tu as|t['’]as) (?:que |seulement |juste )?(?:\\d+|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|quinze|vingt|trente|quarante|cinquante|soixante|cent) (?:façons|manières|moyens|choses|étapes|erreurs|raisons|marchés|règles|types|exercices|techniques|outils|signes|habitudes|leçons)\\b|^\\s*(?:le|la) (?:deuxième|troisième|quatrième|cinquième|sixième|septième|huitième|neuvième|dixième)\\b"
+  },
+  {
+   "id": 12,
+   "nom": "L'objection",
+   "modele": "« {Objection qu'on te fait vraiment}. » D'accord. Voici la version qui marche quand même.",
+   "exemple": "« Je ne veux pas me montrer face caméra. » D'accord. Voici la version sans visage qui vend quand même.",
+   "ecran": "« JE DÉTESTE LA CAMÉRA »",
+   "pour": "Vendre à ceux qui ont déjà dit non une fois.",
+   "ecueil": "Inventer l'objection. Prends-la mot pour mot dans un DM ou un commentaire, fautes comprises.",
+   "match": "^\\s*[«\\\"][^»\\\"]{5,120}[»\\\"][,.]?\\s*(?:ok|d['’]accord|très bien|soit|alors|voici|sauf que)"
+  },
+  {
+   "id": 13,
+   "nom": "Avant / après à l'écran",
+   "modele": "{Montre l'ancien}. {Montre le nouveau}. {Une phrase sur le levier}.",
+   "exemple": "Voilà mon profil en mars. Voilà aujourd'hui. J'ai changé le champ nom, rien d'autre.",
+   "ecran": "MARS  /  MAINTENANT",
+   "pour": "Tout ce qui est visuel. La coupe entre les deux images est le hook, les mots viennent après.",
+   "ecueil": "Trois leviers. Nomme une seule chose qui a changé, sinon la transformation n'est plus crédible.",
+   "match": "\\b(?:ça|voilà|voici)\\s+(?:c['’]était|était|mon|ma|mes)\\b[^.!?]*[.!?]\\s*(?:ça|voilà|voici|et ça|aujourd['’]hui)\\b|\\bavant\\b[^.!?]*\\baprès\\b|\\bil y a (?:\\d+|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|quinze|vingt|trente|quarante|cinquante|soixante|cent) (?:mois|ans?)\\b[^.!?]*\\baujourd['’]hui\\b|\\b(?:je suis passé|on est passé|elle est passée|il est passé) de\\b[^.!?]{1,50}\\bà\\b"
+  },
+  {
+   "id": 14,
+   "nom": "L'appel",
+   "modele": "{Groupe précis}, c'est celle que tu évites depuis le début.",
+   "exemple": "Photographes qui facturent moins de 2 000 € : voilà la page de tarifs que vous évitez.",
+   "ecran": "PHOTOGRAPHES SOUS 2 000 €",
+   "pour": "Réduire une audience large à celle qui convertit. Les partages montent parce que les gens s'identifient entre eux.",
+   "ecueil": "Un groupe si large que ce n'est plus un appel. « Les entrepreneurs » n'est pas un groupe.",
+   "match": "^\\s*(?:(?:à |pour )?(?:tous|toutes) (?:les|ceux|celles)|à ceux qui|à celles qui|pour ceux qui|pour celles qui)\\b|^\\s*[^\\W\\d_][\\w ]{2,28}(?:eurs|euses|istes|ants|antes|iens|iennes)\\b\\s*[,:]|^\\s*(?:attention|écoute[sz]? bien)\\b"
+  },
+  {
+   "id": 15,
+   "nom": "Le record des flops",
+   "modele": "Mes {N} premiers {essais} n'ont rien donné. Voici ce qui a changé au {N+1}e.",
+   "exemple": "Mes 47 premiers reels faisaient 300 vues. Le 48e en a fait 400 000. Une seule chose avait changé.",
+   "ecran": "47 FLOPS, PUIS ÇA",
+   "pour": "Les débutants, c'est-à-dire la plus grosse part de l'audience. Beaucoup de commentaires.",
+   "ecueil": "Faire passer le changement pour de la chance. Si la réponse est « j'ai eu de la chance », il n'y a pas de vidéo.",
+   "match": "\\bmes (?:\\d+|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|quinze|vingt|trente|quarante|cinquante|soixante|cent) premi(?:ers|ères)\\b|\\b\\d+ premi(?:ers|ères) (?:reels?|vidéos?|posts?|clients?|mois)\\b"
+  },
+  {
+   "id": 16,
+   "nom": "La question telle quelle",
+   "modele": "« {Question exactement comme on te l'a posée} » : on me la pose chaque semaine.",
+   "exemple": "« Comment poster régulièrement sans détester ça ? » On me la pose chaque semaine.",
+   "ecran": "ON ME LA POSE CHAQUE SEMAINE",
+   "pour": "La recherche. Une question tapée comme les gens la tapent, c'est ce que la recherche Instagram compare.",
+   "ecueil": "La reformuler proprement. Sa valeur, c'est qu'elle est dans leurs mots, fautes comprises.",
+   "match": "^\\s*[«\\\"]?\\s*(?:comment|pourquoi|quand|où|qui|quel|quelle|quels|quelles|combien|est-ce qu|qu['’]est-ce|que faire|faut-il|peut-on|dois-je|que se passe)\\b[^?]{3,110}\\?|^\\s*[^.!?]{3,140}\\?\\s*$"
+  },
+  {
+   "id": 17,
+   "nom": "Le face-à-face",
+   "modele": "{A} contre {B}. J'ai testé les deux pendant {durée}, et ce n'était pas serré.",
+   "exemple": "Carrousels contre reels. J'ai testé les deux pendant 90 jours, et ce n'était pas serré.",
+   "ecran": "CARROUSELS vs REELS",
+   "pour": "Les commentaires. Les gens arrivent avec un avis, c'est tout l'intérêt.",
+   "ecueil": "Refuser de trancher. Une comparaison qui finit en diplomatie, c'est une vidéo sans fin.",
+   "match": "\\b(?:vs\\.?|versus)\\b|\\bdifférences? entre\\b|\\bj['’]ai testé (?:les )?deux\\b|^\\s*[^\\W\\d_][\\w' ]{1,30} contre [^\\W\\d_][\\w' ]{1,30}[.?!]"
+  },
+  {
+   "id": 18,
+   "nom": "La démo à froid",
+   "modele": "{Commence au milieu de l'action.} Regarde ce que ça fait.",
+   "exemple": "Regarde ce qui se passe quand je colle la légende d'un concurrent ici.",
+   "ecran": "REGARDE ÇA",
+   "pour": "Les captures d'écran et tout ce qui a un résultat visible. Aucune mise en place, la main bouge déjà.",
+   "ecueil": "Un résultat qui met douze secondes à arriver. Si la récompense est lente, coupe jusqu'à elle et montre l'attente après.",
+   "match": "^\\s*regarde[zs]?\\s+(?:ce|ça|ce que|bien|comment)\\b|^\\s*(?:laisse|laissez)-moi (?:te|vous) montrer\\b|^\\s*répète après moi\\b"
+  },
+  {
+   "id": 19,
+   "nom": "L'échéance",
+   "modele": "{Chose} change le {date}. Fais {action} avant.",
+   "exemple": "Ta grille change dès que tu publies un reel. Corrige tes couvertures d'abord.",
+   "ecran": "AVANT TA PROCHAINE PUBLICATION",
+   "pour": "Une urgence réelle : changement de plateforme, saison, règle.",
+   "ecueil": "L'urgence fabriquée. Une fausse échéance, et toutes les suivantes sont dévaluées.",
+   "match": "\\bavant (?:que|qu['’]|le|la|les|ta|ton|tes)\\b[^.!?]*\\b(?:change|changent|ferme|finit|expire|dispara\\w+)\\b|\\bà partir du \\d+\\b|\\bd['’]ici (?:20\\d\\d|la fin)\\b|\\bchange (?:le|dès|à partir)\\b"
+  },
+  {
+   "id": 20,
+   "nom": "La permission",
+   "modele": "Tu n'as pas besoin de {ce que tout le monde dit qu'il faut}.",
+   "exemple": "Tu n'as pas besoin d'une niche. Tu as besoin d'une personne que tu peux nommer.",
+   "ecran": "PAS BESOIN DE NICHE",
+   "pour": "Le soulagement. Énorme taux d'enregistrement, parce que ça retire un frein au lieu d'ajouter une tâche.",
+   "ecueil": "Retirer le frein sans rien mettre à la place. La deuxième moitié, c'est toute la vidéo.",
+   "match": "\\b(?:tu n['’]as|t['’]as|vous n['’]avez|on n['’]a|t['’]as) pas besoin d\\b|\\barrête de (?:t['’]inquiéter|culpabiliser|essayer de)\\b"
+  },
+  {
+   "id": 21,
+   "nom": "Le départ en pleine scène",
+   "modele": "{...et c'est là que {le tournant}.} ou {L'autre jour, {la scène}.}",
+   "exemple": "... et c'est là que le client a demandé à être remboursé. Trois jours après avoir validé.",
+   "ecran": "IL A DEMANDÉ UN REMBOURSEMENT",
+   "pour": "Les histoires. Commencer en pleine scène, ou par un moment daté, donne l'impression d'arriver en retard : une raison de rester.",
+   "ecueil": "Ne jamais revenir combler le trou. Livre le contexte avant la huitième seconde, sinon ça passe pour une erreur.",
+   "match": "^\\s*(?:\\.\\.\\.|…)|^\\s*(?:et (?:c['’]est là que|là|puis|du coup)|alors (?:il|elle|ils) (?:m['’]a |a )?(?:dit|demandé))\\b|^\\s*(?:euh|bah)\\b|^\\s*(?:l['’]autre jour|la semaine dernière|hier|ce matin|il y a (?:\\d+|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|quinze|vingt|trente|quarante|cinquante|soixante|cent) (?:jours?|semaines?|mois|ans)|à (?:\\d+|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|quinze|vingt|trente|quarante|cinquante|soixante|cent)(?:[- ][\\w-]+)? ans|quand j['’]avais (?:\\d+|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|quinze|vingt|trente|quarante|cinquante|soixante|cent))\\b"
+  },
+  {
+   "id": 22,
+   "nom": "Le contre-pied",
+   "modele": "{Une idée reçue, retournée.}",
+   "exemple": "La motivation ne sert à rien.",
+   "ecran": "LA MOTIVATION NE SERT À RIEN",
+   "pour": "Les commentaires. Le spectateur doit s'arrêter pour vérifier qu'il a bien entendu.",
+   "ecueil": "Retourner une idée que personne n'a. L'original doit être un réflexe, sinon le contre-pied n'est qu'une phrase.",
+   "match": "^\\s*[^.!?]{2,40}\\b(?:est|sont) (?:surcot\\w*|sous-cot\\w*|morte?s?|une arnaque|un mensonge|un mythe|inutiles?|dépassée?s?|surestimée?s?)\\b|\\bne sert (?:plus )?à rien\\b|\\bc['’]est (?:faux|un mythe|une arnaque)\\b|\\bon (?:nous|t['’]|vous|m['’]) a (?:vendu|menti|appris|fait croire|toujours dit)\\b|\\bla vérité,? c['’]est\\b|\\bune vérité (?:qui dérange|difficile|que personne)\\b|\\b(?:arrête|arrêtez) de croire\\b|\\bcontrairement à ce qu\\b|\\bla plupart des gens (?:pensent|croient|ne savent pas|se trompent)\\b|\\bc['’]est (?:totalement |complètement )?(?:naïf|faux|un mythe|une arnaque)\\b",
+   "mesure": "Dans le corpus Reel Decode, l'affirmation contre-intuitive est l'ouverture qui marche le mieux : 24 % de hits (220 reels) contre 18 % en moyenne."
+  },
+  {
+   "id": 23,
+   "nom": "La statistique",
+   "modele": "{N} % des {groupe} {fait surprenant}.",
+   "exemple": "33 % des bacheliers ne relisent plus jamais un livre.",
+   "ecran": "33 % NE LISENT PLUS",
+   "pour": "Les partages. Un chiffre qu'on peut répéter à table, on l'envoie à quelqu'un.",
+   "ecueil": "Une statistique sans source. Dis d'où elle vient dans la vidéo, ou ne t'en sers pas.",
+   "match": "^\\s*\\d[\\d,.]*\\s?%|\\b\\d[\\d,.]*\\s?%\\s+des\\b|\\b(?:\\d+|un|une|deux|trois|neuf) (?:personnes? )?sur (?:\\d+|dix|cent)\\b|\\bpour ?cents? des\\b"
+  },
+  {
+   "id": 24,
+   "nom": "La révélation",
+   "modele": "Voici le nouveau {truc}.",
+   "exemple": "Voici le nouvel appareil compact de Sony, et il règle le seul truc que je détestais.",
+   "ecran": "LE NOUVEAU",
+   "pour": "Tout ce qui est physique ou visuel. L'objet est le hook, les mots sont des sous-titres.",
+   "ecueil": "Brandir l'objet sans dire ce qu'il change. Une révélation sans enjeu, c'est une pub.",
+   "match": "^\\s*(?:alors,?\\s+)?(?:voici|voilà|c['’]est)\\s+(?:le|la|les|mon|ma|mes)\\s+nouv(?:eau|el|elle|eaux|elles)\\b|^\\s*(?:ce|cette)\\s+(?:nouveau|nouvel|nouvelle|petit|petite)\\s+[^\\W\\d_]+"
+  },
+  {
+   "id": 25,
+   "nom": "Le résultat d'un autre",
+   "modele": "Il y a un {profil} qui a {résultat} en {durée}.",
+   "exemple": "Il y a une créatrice qui a pris un million d'abonnés en un seul mois.",
+   "ecran": "1 M D'ABONNÉS EN 1 MOIS",
+   "pour": "La preuve quand la personne n'a pas encore son propre chiffre. La troisième personne est permise si c'est vrai.",
+   "ecueil": "Pas de nom, pas de lien. Un miracle anonyme, c'est une rumeur.",
+   "match": "\\b(?:il y a|y a|c['’]est l['’]histoire d['’])\\s*(?:un|une)\\s+(?:mec|gars|fille|créateur|créatrice|élève|client|cliente|pote|ami|amie|entrepreneur|étudiant|étudiante)\\b|\\b(?:un|une) (?:de mes )?(?:élèves?|clients?|clientes?|potes?|amis?|amies?) (?:a|qui a|m['’]a)\\b"
+  },
+  {
+   "id": 26,
+   "nom": "Le superlatif",
+   "modele": "La façon la plus {rapide / simple} de {résultat}, c'est {la réponse}.",
+   "exemple": "La façon la plus rapide de prendre confiance, c'est d'accumuler des preuves que tu ne peux pas contester.",
+   "ecran": "LA FAÇON LA PLUS RAPIDE",
+   "pour": "Les vidéos à une seule affirmation, sans histoire. La forme la plus courante, et la plus facile à mal écrire.",
+   "ecueil": "Un superlatif avec une réponse molle. Si la deuxième moitié est « la régularité », tu n'as rien dit.",
+   "match": "^\\s*(?:la|le|les)?\\s*(?:meilleure?s?|pire|seule?)\\s+(?:façon|manière|chose|erreur|technique|méthode|astuce)\\b|\\bla (?:façon|manière) la plus (?:rapide|simple|efficace)\\b|^\\s*(?:le|la) plus (?:gros|grosse|grand|grande|important|importante)\\s+[^\\W\\d_]+"
+  }
+ ],
+ "classify_order": [
+  1,
+  23,
+  5,
+  4,
+  3,
+  15,
+  20,
+  7,
+  9,
+  22,
+  26,
+  25,
+  24,
+  18,
+  17,
+  8,
+  6,
+  10,
+  16,
+  12,
+  2,
+  13,
+  19,
+  21,
+  11,
+  14
+ ]
+}
